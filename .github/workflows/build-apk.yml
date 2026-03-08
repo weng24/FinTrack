@@ -4,15 +4,13 @@ on:
   push:
     branches:
       - main
-    tags:
-      - 'v*'
   workflow_dispatch:
 
 jobs:
   build_apk:
     name: Build Android APK
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -36,10 +34,16 @@ jobs:
         run: npm ci
 
       - name: Build Web App
-        run: npm run build
+        run: npx vite build
+
+      - name: Add Android Platform
+        run: npx cap add android
 
       - name: Sync Capacitor
         run: npx cap sync android
+
+      - name: Make Gradlew Executable
+        run: chmod +x android/gradlew
 
       - name: Build Android APK
         working-directory: ./android
@@ -48,5 +52,5 @@ jobs:
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: app-debug
+          name: FinTrack-debug
           path: android/app/build/outputs/apk/debug/app-debug.apk
