@@ -29,6 +29,12 @@ jobs:
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          accept-android-sdk-licenses: true
+
+      - name: Install Android SDK platforms
+        run: |
+          sdkmanager "platforms;android-35" "build-tools;35.0.0"
 
       - name: Install NPM Dependencies
         run: npm ci
@@ -47,7 +53,7 @@ jobs:
 
       - name: Build Android APK
         working-directory: ./android
-        run: ./gradlew assembleDebug
+        run: ./gradlew assembleDebug --stacktrace
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
