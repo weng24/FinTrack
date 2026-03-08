@@ -29,12 +29,13 @@ jobs:
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
-        with:
-          accept-android-sdk-licenses: true
 
-      - name: Install Android SDK platforms
+      - name: Accept Android SDK licenses
+        run: yes | sdkmanager --licenses || true
+
+      - name: Install Android SDK components
         run: |
-          sdkmanager "platforms;android-35" "build-tools;35.0.0"
+          sdkmanager "platforms;android-34" "build-tools;34.0.0" "platform-tools"
 
       - name: Install NPM Dependencies
         run: npm ci
@@ -53,9 +54,16 @@ jobs:
 
       - name: Build Android APK
         working-directory: ./android
-        run: ./gradlew assembleDebug --stacktrace
+        env:
+          ANDROID_HOME: ${{ env.ANDROID_HOME }}
+        run: ./gradlew assembleDebug --no-daemon --stacktrace 2>&1 | tail -100
+
+      - name: Find APK
+        if: success()
+        run: find android -name "*.apk" -type f
 
       - name: Upload APK Artifact
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: FinTrack-debug
