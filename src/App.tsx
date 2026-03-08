@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { useState, useEffect } from 'react';
 import { Moon, Sun, Home, List, BarChart3, Settings, Plus } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -14,23 +13,10 @@ function App() {
     const isDrawerOpen = useUIStore(state => state.isDrawerOpen);
     const openDrawer = useUIStore(state => state.openDrawer);
     const closeDrawer = useUIStore(state => state.closeDrawer);
+    const toggleTheme = useUIStore(state => state.toggleTheme);
+    const themeMode = useUIStore(state => state.themeMode);
 
-    const [isDarkMode, setIsDarkMode] = useState(() => {
-        return localStorage.getItem('theme') === 'dark' ||
-            (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
-    });
-
-    useEffect(() => {
-        if (isDarkMode) {
-            document.documentElement.classList.add('dark');
-            localStorage.setItem('theme', 'dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-            localStorage.setItem('theme', 'light');
-        }
-    }, [isDarkMode]);
-
-    const toggleTheme = () => setIsDarkMode(!isDarkMode);
+    const isDark = themeMode === 'dark' || (themeMode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
 
     return (
         <Router>
@@ -46,7 +32,7 @@ function App() {
                             onClick={toggleTheme}
                             className="p-2 rounded-full hover:bg-card transition-colors"
                         >
-                            {isDarkMode ? <Sun size={20} className="text-yellow-400" /> : <Moon size={20} className="text-slate-600" />}
+                            {isDark ? <Sun size={20} className="text-yellow-400" /> : <Moon size={20} className="text-slate-600" />}
                         </button>
                     </header>
 
