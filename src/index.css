@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@layer base {
+  :root {
+    --background: #f8fafc;
+    --foreground: #0f172a;
+    --primary: #3b82f6;
+    --primary-foreground: #ffffff;
+    --card: #ffffff;
+    --card-foreground: #0f172a;
+    --border: #e2e8f0;
+    --destructive: #ef4444;
+    --success: #10b981;
+  }
+
+  .dark {
+    --background: #0c1222;
+    --foreground: #f1f5f9;
+    --primary: #3b82f6;
+    --primary-foreground: #ffffff;
+    --card: #1a2332;
+    --card-foreground: #f1f5f9;
+    --border: #2a3a4e;
+    --destructive: #f87171;
+    --success: #34d399;
+  }
+
+  html {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  * {
+    border-color: var(--border);
+    box-sizing: border-box;
+  }
+}
+
+/* Remove default App.css styles that may conflict */
+#root {
+  min-height: 100vh;
+}
