@@ -49,6 +49,10 @@ jobs:
       - name: Sync Capacitor
         run: npx cap sync android
 
+      - name: Inject Google Auth Client ID to strings.xml
+        run: |
+          sed -i '/<\/resources>/i \    <string name="server_client_id">47892888369-q2mss1djd8s2rldol2l4v5n5o2nd7iuf.apps.googleusercontent.com<\/string>' android/app/src/main/res/values/strings.xml
+
       - name: Make Gradlew Executable
         run: chmod +x android/gradlew
 
