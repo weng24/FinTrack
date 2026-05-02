@@ -287,7 +287,7 @@ export default function Settings() {
                                         <div className="text-xs text-slate-400 capitalize">{acc.type}</div>
                                     </div>
                                     <div className="text-sm font-bold text-foreground mr-2">
-                                        ${acc.balance.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                                        {currency}{acc.balance.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                                     </div>
                                     <button
                                         onClick={() => handleEditAccount(acc)}

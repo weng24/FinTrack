@@ -38,9 +38,11 @@ jobs:
           sdkmanager "platforms;android-34" "build-tools;34.0.0" "platform-tools"
 
       - name: Install NPM Dependencies
-        run: npm ci
+        run: npm ci --legacy-peer-deps
 
       - name: Build Web App
+        env:
+          VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
         run: npx vite build
 
       - name: Add Android Platform
@@ -51,7 +53,7 @@ jobs:
 
       - name: Inject Google Auth Client ID to strings.xml
         run: |
-          sed -i '/<\/resources>/i \    <string name="server_client_id">47892888369-q2mss1djd8s2rldol2l4v5n5o2nd7iuf.apps.googleusercontent.com<\/string>' android/app/src/main/res/values/strings.xml
+          sed -i '/<\/resources>/i \    <string name="server_client_id">${{ secrets.GOOGLE_SERVER_CLIENT_ID }}</string>' android/app/src/main/res/values/strings.xml
 
       - name: Make Gradlew Executable
         run: chmod +x android/gradlew

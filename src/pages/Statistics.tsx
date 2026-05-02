@@ -204,7 +204,7 @@ export default function Statistics() {
                                         ))}
                                     </Pie>
                                     <Tooltip
-                                        formatter={(value: number) => [`${currency}${value.toFixed(2)}`, '']}
+                                        formatter={(value: number | undefined) => [`${currency}${(value ?? 0).toFixed(2)}`, '']}
                                         contentStyle={{
                                             borderRadius: '12px',
                                             border: 'none',
@@ -244,7 +244,7 @@ export default function Statistics() {
                             <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#94a3b8' }} />
                             <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#94a3b8' }} tickFormatter={(v) => `${currency}${v}`} />
                             <Tooltip
-                                formatter={(value: number, name: string) => [`${currency}${value.toFixed(2)}`, name.charAt(0).toUpperCase() + name.slice(1)]}
+                                formatter={(value: number | undefined, name: string | undefined) => [`${currency}${(value ?? 0).toFixed(2)}`, (name ?? '').charAt(0).toUpperCase() + (name ?? '').slice(1)]}
                                 contentStyle={{
                                     borderRadius: '12px',
                                     border: 'none',
