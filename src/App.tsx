@@ -1,11 +1,12 @@
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { Moon, Sun, Home, List, BarChart3, Settings, Plus } from 'lucide-react';
+import { Moon, Sun, Home, List, BarChart3, Settings, Plus, LineChart } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 import Dashboard from './pages/Dashboard';
 import Transactions from './pages/Transactions';
 import Statistics from './pages/Statistics';
 import SettingsPage from './pages/Settings';
+import Investments from './pages/Investments';
 import AddTransactionDrawer from './components/AddTransactionDrawer';
 import { useUIStore } from './store';
 
@@ -40,6 +41,7 @@ function App() {
                         <Route path="/" element={<Dashboard />} />
                         <Route path="/transactions" element={<Transactions />} />
                         <Route path="/statistics" element={<Statistics />} />
+                        <Route path="/investments" element={<Investments />} />
                         <Route path="/settings" element={<SettingsPage />} />
                     </Routes>
                 </main>
@@ -62,6 +64,7 @@ function App() {
                         <NavItem to="/" icon={<Home size={22} />} label="Home" />
                         <NavItem to="/transactions" icon={<List size={22} />} label="Ledger" />
                         <NavItem to="/statistics" icon={<BarChart3 size={22} />} label="Stats" />
+                        <NavItem to="/investments" icon={<LineChart size={22} />} label="Invest" />
                         <NavItem to="/settings" icon={<Settings size={22} />} label="Settings" />
                     </ul>
                 </nav>

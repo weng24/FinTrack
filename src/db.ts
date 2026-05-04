@@ -11,8 +11,17 @@ export interface Category {
 export interface Account {
     id?: number;
     name: string;
-    type: 'cash' | 'bank' | 'credit' | 'investment';
+    type: 'cash' | 'bank' | 'credit' | 'investment' | 'debt' | 'loan';
     balance: number;
+}
+
+export interface Investment {
+    id?: number;
+    symbol: string;
+    name: string;
+    quantity: number;
+    averagePrice: number;
+    currency: string;
 }
 
 export interface Transaction {
@@ -31,6 +40,7 @@ const db = new Dexie('FinTrackDB') as Dexie & {
     categories: EntityTable<Category, 'id'>;
     accounts: EntityTable<Account, 'id'>;
     transactions: EntityTable<Transaction, 'id'>;
+    investments: EntityTable<Investment, 'id'>;
 };
 
 // Schema declaration
@@ -38,6 +48,10 @@ db.version(1).stores({
     categories: '++id, type, name',
     accounts: '++id, type, name',
     transactions: '++id, type, date, accountId, categoryId',
+});
+
+db.version(2).stores({
+    investments: '++id, symbol, name',
 });
 
 // Seed initial data if empty

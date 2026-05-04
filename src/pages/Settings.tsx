@@ -9,7 +9,7 @@ import {
     Plus, Trash2, Edit3, X,
     Sun, Moon, Monitor, Cloud, Wallet,
     CreditCard, Building2, TrendingUp, RefreshCw, LogIn, LogOut, CloudUpload, CloudDownload,
-    DollarSign, Target,
+    DollarSign, Target, Handshake, Landmark,
 } from 'lucide-react';
 import { useUIStore } from '../store';
 
@@ -18,6 +18,8 @@ const ACCOUNT_TYPES = [
     { value: 'bank', label: 'Bank', icon: Building2 },
     { value: 'credit', label: 'Credit Card', icon: CreditCard },
     { value: 'investment', label: 'Investment', icon: TrendingUp },
+    { value: 'debt', label: 'Debt (Owe)', icon: Landmark },
+    { value: 'loan', label: 'Loan (Lend)', icon: Handshake },
 ] as const;
 
 type AccountType = typeof ACCOUNT_TYPES[number]['value'];

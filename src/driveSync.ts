@@ -58,6 +58,7 @@ export async function uploadBackup(accessToken: string): Promise<void> {
         categories: await db.categories.toArray(),
         accounts: await db.accounts.toArray(),
         transactions: await db.transactions.toArray(),
+        investments: await db.investments.toArray(),
     };
     const jsonBlob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
 
@@ -97,7 +98,7 @@ export async function uploadBackup(accessToken: string): Promise<void> {
 
 // ── Download and restore ────────────────────────────────────────────
 
-export async function downloadAndRestore(accessToken: string): Promise<{ categories: number; accounts: number; transactions: number }> {
+export async function downloadAndRestore(accessToken: string): Promise<{ categories: number; accounts: number; transactions: number; investments: number }> {
     const fileId = await findBackupFile(accessToken);
     if (!fileId) throw new Error('No backup found in Google Drive');
 
@@ -111,21 +112,27 @@ export async function downloadAndRestore(accessToken: string): Promise<{ categor
     if (!data.categories || !data.accounts || !data.transactions) {
         throw new Error('Invalid backup file format');
     }
+    
+    // Ensure investments array exists (for older backups)
+    const investments = data.investments || [];
 
     // Clear and restore
-    await db.transaction('rw', db.categories, db.accounts, db.transactions, async () => {
+    await db.transaction('rw', db.categories, db.accounts, db.transactions, db.investments, async () => {
         await db.categories.clear();
         await db.accounts.clear();
         await db.transactions.clear();
+        await db.investments.clear();
 
         await db.categories.bulkAdd(data.categories.map(({ id, ...rest }: any) => rest));
         await db.accounts.bulkAdd(data.accounts.map(({ id, ...rest }: any) => rest));
         await db.transactions.bulkAdd(data.transactions.map(({ id, ...rest }: any) => rest));
+        await db.investments.bulkAdd(investments.map(({ id, ...rest }: any) => rest));
     });
 
     return {
         categories: data.categories.length,
         accounts: data.accounts.length,
         transactions: data.transactions.length,
+        investments: investments.length,
     };
 }
