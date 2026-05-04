@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { Moon, Sun, Home, List, BarChart3, Settings, Plus, LineChart } from 'lucide-react';
 import { motion } from 'framer-motion';
 
