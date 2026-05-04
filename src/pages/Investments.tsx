@@ -28,22 +28,25 @@ export default function Investments() {
         
         const newPrices: Record<string, number> = { ...prices };
         let hasError = false;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const isNative = !!(window as any).Capacitor?.isNativePlatform;
 
         for (const inv of investments) {
             try {
-                // Using allorigins CORS proxy to fetch Yahoo Finance data
-                const yfUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(inv.symbol)}?interval=1d`;
-                const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(yfUrl)}`;
+                // In Capacitor (APK), the native webview has no CORS restrictions,
+                // so we can fetch Yahoo Finance directly. In dev mode, use Vite proxy.
+                const chartPath = `/v8/finance/chart/${encodeURIComponent(inv.symbol)}?interval=1d`;
+                const url = isNative
+                    ? `https://query1.finance.yahoo.com${chartPath}`
+                    : `/api/yahoo${chartPath}`;
                 
-                const res = await fetch(proxyUrl);
+                const res = await fetch(url);
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
                 const data = await res.json();
                 
-                if (data.contents) {
-                    const yfData = JSON.parse(data.contents);
-                    const price = yfData?.chart?.result?.[0]?.meta?.regularMarketPrice;
-                    if (price) {
-                        newPrices[inv.symbol] = price;
-                    }
+                const price = data?.chart?.result?.[0]?.meta?.regularMarketPrice;
+                if (price) {
+                    newPrices[inv.symbol] = price;
                 }
             } catch (err) {
                 console.error(`Failed to fetch price for ${inv.symbol}`, err);
